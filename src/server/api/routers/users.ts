@@ -6,7 +6,15 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 
-export const exampleRouter = createTRPCRouter({
+export const usersRouter = createTRPCRouter({
+  createUser: publicProcedure
+    .input(z.object({ name: z.string(), contactInfo: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const newlyCreatedUser = await ctx.prisma.speedDateUser.create({
+        data: input,
+      });
+      return newlyCreatedUser;
+    }),
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {

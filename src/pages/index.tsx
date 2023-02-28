@@ -2,16 +2,27 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { Button, Form, Input } from "react-daisyui";
 import { useForm } from "react-hook-form";
+import { api } from "~/utils/api";
+
+type RegisterForm = {
+  name: string;
+  contactInfo: string;
+};
+
 const Home: NextPage = () => {
+  const createUser = api.users.createUser.useMutation();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data: any) => {
-    // this is called only when everything is good to go
-    console.log(data);
+  } = useForm<RegisterForm>();
+
+  const onSubmit = async (data: RegisterForm) => {
+    // TODO: call that mutation method
+    const newUser = await createUser.mutateAsync(data);
+    console.table(newUser);
   };
   return (
     <>
