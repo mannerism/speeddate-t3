@@ -22,7 +22,20 @@ export const usersRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-
+  findMatch: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      //TODO: find all other users who have status of waiting who are NOT the user looking for a match
+      const firstMatch = await ctx.prisma.speedDateUser.findFirst({
+        where: {
+          status: "waiting",
+          NOT: {
+            id: input.userId,
+          },
+        },
+      });
+      return firstMatch;
+    }),
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.example.findMany();
   }),

@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { Button, Form, Input } from "react-daisyui";
 import { useForm } from "react-hook-form";
 import { api } from "~/utils/api";
@@ -11,6 +12,7 @@ type RegisterForm = {
 
 const Home: NextPage = () => {
   const createUser = api.users.createUser.useMutation();
+  const router = useRouter();
 
   const {
     register,
@@ -21,8 +23,8 @@ const Home: NextPage = () => {
 
   const onSubmit = async (data: RegisterForm) => {
     // TODO: call that mutation method
-    const newUser = await createUser.mutateAsync(data);
-    console.table(newUser);
+    const _ = await createUser.mutateAsync(data);
+    router.push("/waiting");
   };
   return (
     <>
